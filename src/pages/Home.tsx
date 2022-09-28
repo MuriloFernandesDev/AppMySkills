@@ -29,6 +29,10 @@ export default function Home() {
     setMySkills((oldSkills) => [...oldSkills, data]);
   }
 
+  function handleRemoveSkill(id: string) {
+    setMySkills((oldState) => oldState.filter((skill) => skill.id !== id));
+  }
+
   useEffect(() => {
     const CurrentHour = new Date().getHours();
     if (CurrentHour < 12 && CurrentHour > 5) {
@@ -36,7 +40,7 @@ export default function Home() {
     } else if (CurrentHour > 12 && CurrentHour < 18) {
       setGretting("Good afternoon");
     } else {
-      setGretting("Boa night");
+      setGretting("Good night");
     }
   }, []);
 
@@ -52,7 +56,7 @@ export default function Home() {
         onChangeText={setSkill}
       />
 
-      <Button onPress={handleNewAddSkill} />
+      <Button title="Add" onPress={handleNewAddSkill} />
 
       <Text style={[styles.title, { marginTop: 30, textAlign: "left" }]}>
         MySkills
@@ -61,7 +65,12 @@ export default function Home() {
       <FlatList
         data={mySkills}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <SkillCard skill={item} />}
+        renderItem={({ item }) => (
+          <SkillCard
+            skill={item.name}
+            onPress={() => handleRemoveSkill(item.id)}
+          />
+        )}
       />
     </View>
   );
